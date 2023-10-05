@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Falling Circle</title>
+  </head>
+  <body>
+    <canvas
+      style="background-color: red"
+      id="canvas"
+      height="600px"
+      width="800px"
+    >
+    </canvas>
+    <script>
+      const canvas = document.getElementById("canvas");
+      const c = canvas.getContext("2d");
+
+      let circle = null;
+      const circleRadius = 30;
+      const fallSpeed = 2;
+      const bounceFactor = 0.7;
+
+      function drawCircle(x, y) {
+        c.clearRect(0, 0, canvas.width, canvas.height);
+        c.beginPath();
+        c.arc(x, y, circleRadius, 0, Math.PI * 2);
+        c.fillStyle = "blue";
+        c.fill();
+        c.closePath();
+      }
+
+      // Game Loop
+      function update() {
+        if (circle) {
+          drawCircle(circle.x, circle.y);
+
+          if (circle.y + circleRadius < canvas.height) {
+            circle.y += fallSpeed;
+          } else {
+            // Bounce when reaching the bottom
+            circle.y = canvas.height - circleRadius;
+            fallSpeed *= -bounceFactor;
+          }
+        }
+
+        requestAnimationFrame(update);
+      }
+
+      update();
+
+      canvas.addEventListener("click", (e) => {
+        const x = e.clientX - canvas.getBoundingClientRect().left;
+        const y = e.clientY;
+        circle = { x, y, radius: circleRadius };
+      });
+    </script>
+  </body>
+</html>
